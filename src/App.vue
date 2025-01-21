@@ -1,46 +1,74 @@
 <script setup>
-  import { ref } from 'vue'
-  const name = ref('John Doe')
-  const status = ref(true)
-  const status2 = ref('active')
-  const tasks = ref(['task1', 'task2', 'task3'])
-  const link = ref('https://www.google.com')
-  const toggleStatus = () => {
-    //Para poder acceder a un valor reactivo tenemos que poner .value
-    if (status2.value === 'active') {
-      status2.value = 'pending'
-    } else {
-      status2.value = 'active'
-    }
-    
+import { ref, computed } from 'vue'
+import Padre from './components/Padre.vue'
+const miNombre = 'Manuel'
+const miEdad = 18
+const miColor = ref('azul')
+const selector = 'azul'
+const saludar = (nombre) => {
+  console.log(`Hola ${nombre}`)
+}
+const contador = ref(0)
+const incrementar = () => {
+  contador.value++
+  if (contador.value > 5) {
+    miColor.value = 'verde'
   }
-  let hola = 1
-  hola = 2
+  if (contador.value >= 0 && contador.value < 5) {
+    miColor.value = 'azul'
+  }
+  visible.value = contador.value === 0
+}
+const decrementar = () => {
+  contador.value--
+  if (contador.value < 0) {
+    miColor.value = 'rojo'
+  }
+  visible.value = contador.value === 0
+}
+
+const tareas = ref(['Comprar pan', 'Hacer la comida', 'Estudiar'])
+
+const visible = ref(true)
+
+const comprobacion = computed (() => {
+  return contador.value === 0
+})
 </script>
 <template>
-  <h1> {{ name }}</h1>
-  <!--v-if-->
-  <p v-if="status">User is active</p>
-  <p v-else>User is inactive</p>
-  <p v-if="status2 === 'active'">Second user active</p>
-  <p v-else>Second user inactive</p>
-  <h3>Tasks:</h3>
+  <h1 :class="selector">
+    Hola soy {{ miNombre }} y tengo {{ miEdad }}
+  </h1>
+  <button @click="saludar(miNombre)">Aceptar</button>
+  <br />
+  <button @click="incrementar">+</button>
+  <span :class="miColor">{{ contador }}</span>
+  <button @click="decrementar">-</button>
+  <br />
+  <div v-if="contador < 0">Escribe una cantidad mayor de 0</div>
+  <div v-else-if="contador >= 5">Escribe una cantidad menor de 5</div>
+  <div v-else>La cantidad es correcta</div>
+  <div v-show="comprobacion">No está permitido el número 0</div>
   <ul>
-  <!--v-for-->
-    <li v-for="task in tasks" :key="task">{{ task }}</li>
+    <li v-for="(tarea, index) in tareas" :key="index">{{ tarea }}</li>
   </ul>
-  <!--v-bind-->
-  <a v-bind:href="link">Google</a>
-    <!--<a :href="link">Google</a>-->
-  <!--v-on-->
-  <br/>
-  <button v-on:click="toggleStatus">Change Status</button>
-<!--   <button @:click="toggleStatus">Change Status</button>
- -->
-
-  <p>{{ hola }}</p>
+  <Padre />
 </template>
 
 <style scoped>
+span {
+  padding: 0 5px;
+}
 
+.rojo {
+  color: red;
+}
+
+.verde {
+  color: green;
+}
+
+.azul {
+  color: blue;
+}
 </style>
