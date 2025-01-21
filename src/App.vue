@@ -14,7 +14,8 @@
     }
     
   }
-
+  let hola = 1
+  hola = 2
 </script>
 <template>
   <h1> {{ name }}</h1>
@@ -37,6 +38,7 @@
 <!--   <button @:click="toggleStatus">Change Status</button>
  -->
 
+  <p>{{ hola }}</p>
 </template>
 
 <style scoped>
